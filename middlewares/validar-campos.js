@@ -2,13 +2,13 @@ const { validationResult } = require("express-validator");
 
 const validarCampos = (req, res, next) => {
 
-    const error = validationResult(req);
-    
-    if( !error.isEmpty() ){
-        return res.status(400).json(error)
+    try {
+        validationResult(req).throw();
+        return next();
+    } catch (error) {
+        res.status(403);
+        res.send( { errors: err.array() } );
     }
-
-    next();
 
 }
 
